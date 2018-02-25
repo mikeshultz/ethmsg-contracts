@@ -5,11 +5,10 @@ contract MessageStore {
     struct Message {
         uint created;
         bytes32 decryptionKey;
-        bytes32 signature;
         bytes32 contenHash;
     }
 
-    event MessageAdded(bytes32 decryptionKey, bytes32 signature, bytes32 ipfsHash);
+    event MessageAdded(bytes32 decryptionKey, bytes32 ipfsHash);
     event Denied(address sender);
 
     modifier adminOnly() {
@@ -45,14 +44,12 @@ contract MessageStore {
      * @param _user is the address to pull from
      * @return uint is the block number when the message was created
      * @return bytes32 is the decryption key(if any)
-     * @return bytes32 is the signature of the message
      * @return bytes32 is the IPFS hash of the message
      */
-    function get(address _user) public view returns (uint, bytes32, bytes32, bytes32) {
+    function get(address _user) public view returns (uint, bytes32, bytes32) {
         return (
             messages[_user][messages[_user].length].created,
             messages[_user][messages[_user].length].decryptionKey,
-            messages[_user][messages[_user].length].signature,
             messages[_user][messages[_user].length].contenHash
         );
     }
@@ -63,14 +60,12 @@ contract MessageStore {
      * @param _idx the message index to pull
      * @return uint is the block number when the message was created
      * @return bytes32 is the decryption key(if any)
-     * @return bytes32 is the signature of the message
      * @return bytes32 is the IPFS hash of the message
      */
-    function get(address _user, uint _idx) public view returns (uint, bytes32, bytes32, bytes32) {
+    function get(address _user, uint _idx) public view returns (uint, bytes32, bytes32) {
         return (
             messages[_user][_idx].created,
             messages[_user][_idx].decryptionKey,
-            messages[_user][_idx].signature,
             messages[_user][_idx].contenHash
         );
     }
@@ -87,20 +82,18 @@ contract MessageStore {
     /**
      * @dev getLength returns the total messages for a user
      * @param _decryptionKey is the sym encryption key
-     * @param _signature is signature of the message after it was signed
      * @param _contenHash is the IPFS hash of the stored message
      */
-    function add(bytes32 _decryptionKey, bytes32 _signature, bytes32 _contenHash) public {
+    function add(bytes32 _decryptionKey, bytes32 _contenHash) public {
         if (_contenHash == bytes32(0)) {
             revert();
         }
         messages[msg.sender].push(Message(
             block.number,
             _decryptionKey,
-            _signature,
             _contenHash
         ));
-        MessageAdded(_decryptionKey, _signature, _contenHash);
+        MessageAdded(_decryptionKey, _contenHash);
     }
 
     /**

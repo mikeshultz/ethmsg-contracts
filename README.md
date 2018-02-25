@@ -39,21 +39,20 @@ much all state necessary for the dapp.
 
 `get()` will provide information on the latest message from a user.  It provides
 the block number when it was `created`, the `decryptionKey` used to decrypt the
-message(if applicable), the message `signature` signed by the author, and the 
-IPFS `contenHash` of the method.
+message(if applicable) and the IPFS `contenHash` of the method.
 
 ##### get(address user, uint index)
 
 This version of `get()` will will provide information on the a message at a 
 specific index for a user.  It provides the block number when it was `created`, 
-the `decryptionKey` used to decrypt the message(if applicable), the message 
-`signature` signed by the author, and the IPFS `contenHash` of the method.
+the `decryptionKey` used to decrypt the message(if applicable) and the IPFS 
+`contenHash` of the method.
 
 ##### getLength(address user)
 
 `getLength()` will return the total number of messages stored by a user.
 
-##### add(bytes32 decryptionKey, bytes32 signature, bytes32 contenHash)
+##### add(bytes32 decryptionKey, bytes32 contenHash)
 
 `add()` is used to save a message to Ethmsg.  Only `contentHash` is required.
 
